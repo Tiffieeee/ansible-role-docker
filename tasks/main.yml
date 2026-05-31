@@ -9,8 +9,14 @@
     update_cache: true
 
 - name: Voeg Docker GPG key toe
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /tmp/docker.gpg
+    mode: '0644'
+
+- name: Dearmor Docker GPG key
   ansible.builtin.shell:
-    cmd: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    cmd: gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg /tmp/docker.gpg
     creates: /usr/share/keyrings/docker-archive-keyring.gpg
 
 - name: Voeg Docker repository toe
